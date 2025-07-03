@@ -23,10 +23,19 @@ def check_requirements():
     else:
         print("⚠️  CUDA不可用，将使用CPU训练（速度较慢）")
     
+    # 数据加载
+    root_dir = os.path.dirname(os.path.abspath(__file__))
+    os.chdir(root_dir)  # 确保当前工作目录是脚本所在
+    print("Current working directory:", os.getcwd())
+    print("root_dir:", root_dir)
+    train_path = os.path.join(root_dir, "data/translation2019zh_train.json")
+    valid_path = os.path.join(root_dir, "data/translation2019zh_valid.json")
+    print(f"Train path: {train_path}")
+    print(f"Valid path: {valid_path}")
     # 检查数据文件
-    train_file = "data/translation2019zh_train.json"
-    valid_file = "data/translation2019zh_valid.json"
-    
+    train_file = train_path
+    valid_file = valid_path
+
     if os.path.exists(train_file) and os.path.exists(valid_file):
         print("✓ 数据文件存在")
     else:
@@ -165,8 +174,8 @@ def main():
     # 获取用户选择
     while True:
         try:
-            choice = input("请输入选择 (1-5): ").strip()
-            
+            #choice = input("请输入选择 (1-5): ").strip()
+            choice = 4
             if choice == '1':
                 run_quick_test()
                 break

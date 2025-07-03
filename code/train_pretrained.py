@@ -327,12 +327,22 @@ def main():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f'Using device: {device}')
     
+    # 数据加载
+    root_dir = os.path.dirname(os.path.abspath(__file__))
+    os.chdir(root_dir)  # 确保当前工作目录是脚本所在
+    print("Current working directory:", os.getcwd())
+    print("root_dir:", root_dir)
+    train_path = os.path.join(root_dir, "data/translation2019zh_train.json")
+    valid_path = os.path.join(root_dir, "data/translation2019zh_valid.json")
+    print(f"Train path: {train_path}")
+    print(f"Valid path: {valid_path}")
+    
     # 数据加载 - 使用更小的配置
     print("Loading data...")
     train_loader, valid_loader, vocab_en, vocab_zh = create_dataloaders(
-        train_path="data/translation2019zh_train.json",
-        valid_path="data/translation2019zh_valid.json",
-        batch_size=8,   # 减小batch size
+        train_path=train_path,
+        valid_path=valid_path,
+        batch_size=16,   # 减小batch size
         max_len=64      # 减小序列长度
     )
     
@@ -365,7 +375,7 @@ def main():
     
     # 开始训练
     print("Starting training with pretrained model...")
-    trainer.train(num_epochs=5)  # 更少的训练轮数
+    trainer.train(num_epochs=1)  # 更少的训练轮数
 
 if __name__ == "__main__":
     main()
