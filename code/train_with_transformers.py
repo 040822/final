@@ -364,7 +364,7 @@ def main():
         train_loader, valid_loader, vocab_en, vocab_zh = create_dataloaders(
             train_path=train_path,
             valid_path=valid_path,
-            batch_size=8,  # 较小的batch size
+            batch_size=16,  # 较小的batch size
             max_len=64,
             use_transformers=True,
             tokenizer_name='bert-base-multilingual-cased'
@@ -400,7 +400,7 @@ def main():
     
     # 开始训练
     print("Starting training with Transformers...")
-    trainer.train(num_epochs=5)
+    trainer.train(num_epochs=1)
 
 if __name__ == "__main__":
     main()
