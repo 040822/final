@@ -66,7 +66,13 @@ def show_training_options():
     print("   - 5个训练轮次")
     print("   - 预计训练时间: 2-4小时")
     print()
-    print("5. 📊 仅测试数据加载")
+    print("5. � 使用Transformers分词器 (推荐)")
+    print("   - BERT多语言分词器")
+    print("   - 更好的分词效果")
+    print("   - 支持子词分割")
+    print("   - 预计训练时间: 2-3小时")
+    print()
+    print("6. �📊 仅测试数据加载")
     print("   - 验证数据处理是否正常")
     print("   - 不进行训练")
     print()
@@ -145,6 +151,21 @@ def run_pretrained():
     except ImportError:
         print("❌ 缺少transformers库，请运行: pip install transformers")
         print("或选择其他训练模式")
+    except Exception as e:
+        print(f"❌ 训练失败: {e}")
+
+def run_transformers_training():
+    """使用Transformers分词器训练"""
+    print("\n🔤 启动Transformers分词器训练...")
+    try:
+        import train_with_transformers
+        train_with_transformers.main()
+    except ImportError:
+        print("❌ 缺少transformers库，请运行: pip install transformers")
+        print("或选择其他训练模式")
+    except Exception as e:
+        print(f"❌ 训练失败: {e}")
+        print("请检查数据文件和环境配置")
 
 def test_data_loading():
     """测试数据加载"""
@@ -165,7 +186,7 @@ def main():
     # 获取用户选择
     while True:
         try:
-            choice = input("请输入选择 (1-5): ").strip()
+            choice = input("请输入选择 (1-6): ").strip()
             
             if choice == '1':
                 run_quick_test()
@@ -180,10 +201,13 @@ def main():
                 run_pretrained()
                 break
             elif choice == '5':
+                run_transformers_training()
+                break
+            elif choice == '6':
                 test_data_loading()
                 break
             else:
-                print("❌ 无效选择，请输入1-5")
+                print("❌ 无效选择，请输入1-6")
         except KeyboardInterrupt:
             print("\n\n👋 退出程序")
             sys.exit(0)
