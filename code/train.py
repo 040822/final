@@ -189,10 +189,18 @@ def main():
     print(f'Using device: {device}')
     
     # 数据加载
+    root_dir = os.path.dirname(os.path.abspath(__file__))
+    os.chdir(root_dir)  # 确保当前工作目录是脚本所在
+    print("Current working directory:", os.getcwd())
+    print("root_dir:", root_dir)
+    train_path = os.path.join(root_dir, "data/translation2019zh_train.json")
+    valid_path = os.path.join(root_dir, "data/translation2019zh_valid.json")
+    print(f"Train path: {train_path}")
+    print(f"Valid path: {valid_path}")
     print("Loading data...")
     train_loader, valid_loader, vocab_en, vocab_zh = create_dataloaders(
-        train_path="./code/data/translation2019zh_train.json",
-        valid_path="./code/data/translation2019zh_valid.json",
+        train_path=train_path,
+        valid_path=valid_path,
         batch_size=16,
         max_len=128
     )
