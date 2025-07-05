@@ -1,0 +1,26 @@
+🚀 英译中翻译系统启动器
+==================================================
+开始快速训练 - 模型类型: bilstm
+✓ 配置文件已创建: configs/bilstm_config.json
+
+==================================================
+执行: 训练bilstm模型
+命令: python main_trainer.py         --train_data_path "data/translation2019zh_train.json"         --model_type bilstm         --epochs 5         --batch_size 16         --learning_rate 0.0001         --log_dir "logs/bilstm"         --model_dir "models/bilstm"         --cache_dir "cache"         --sample_ratio 0.1         --use_accelerate         --mixed_precision fp16         --early_stopping 3
+==================================================
+✗ 命令执行失败
+2025-07-05 20:30:52,291 - utils - INFO - 日志系统已设置，日志文件: logs/bilstm/training_20250705_203052.log
+2025-07-05 20:30:52,292 - __main__ - INFO - 开始训练...
+2025-07-05 20:30:52,292 - __main__ - INFO - 加载数据...
+Traceback (most recent call last):
+  File "/root/final/code/main_trainer.py", line 627, in <module>
+    main()
+  File "/root/final/code/main_trainer.py", line 622, in main
+    best_bleu = trainer.train()
+                ^^^^^^^^^^^^^^^
+  File "/root/final/code/main_trainer.py", line 511, in train
+    self.load_data()
+  File "/root/final/code/main_trainer.py", line 117, in load_data
+    train_loader, val_loader, test_loader, vocab_info = create_smart_dataloaders(
+                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: create_smart_dataloaders() got an unexpected keyword argument 'train_path'
+
