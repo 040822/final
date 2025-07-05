@@ -1,0 +1,33 @@
+Traceback (most recent call last):
+  File "/root/final/code/translation_evaluator.py", line 8, in <module>
+    import torch
+  File "/root/miniconda3/lib/python3.12/site-packages/torch/__init__.py", line 2475, in <module>
+    from torch import (
+  File "/root/miniconda3/lib/python3.12/site-packages/torch/export/__init__.py", line 28, in <module>
+    from torch.fx.passes.infra.pass_base import PassResult
+  File "/root/miniconda3/lib/python3.12/site-packages/torch/fx/passes/__init__.py", line 1, in <module>
+    from . import graph_drawer
+  File "/root/miniconda3/lib/python3.12/site-packages/torch/fx/passes/graph_drawer.py", line 13, in <module>
+    from torch.fx.passes.shape_prop import TensorMetadata
+  File "/root/miniconda3/lib/python3.12/site-packages/torch/fx/passes/shape_prop.py", line 12, in <module>
+    from torch._subclasses.meta_utils import is_sparse_any
+  File "/root/miniconda3/lib/python3.12/site-packages/torch/_subclasses/__init__.py", line 2, in <module>
+    from torch._subclasses.fake_tensor import (
+  File "/root/miniconda3/lib/python3.12/site-packages/torch/_subclasses/fake_tensor.py", line 65, in <module>
+    from ._fake_tensor_utils import _CacheKeyState, _PySymInputStub, _SymIntOutputStub
+  File "/root/miniconda3/lib/python3.12/site-packages/torch/_subclasses/_fake_tensor_utils.py", line 22, in <module>
+    @dataclass(frozen=True)
+     ^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/lib/python3.12/dataclasses.py", line 1258, in wrap
+    return _process_class(cls, init, repr, eq, order, unsafe_hash,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/lib/python3.12/dataclasses.py", line 1114, in _process_class
+    for fn in _frozen_get_del_attr(cls, field_list, globals):
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/lib/python3.12/dataclasses.py", line 644, in _frozen_get_del_attr
+    return (_create_fn('__setattr__',
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/lib/python3.12/dataclasses.py", line 473, in _create_fn
+    exec(txt, globals, ns)
+  File "<string>", line 0, in <module>
+KeyboardInterrupt
