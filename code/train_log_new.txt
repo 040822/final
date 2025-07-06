@@ -1,0 +1,23 @@
+=== 英中翻译模型训练 ===
+✓ 环境变量设置完成
+🚀 加载数据集...
+✓ 训练集加载完成，耗时: 1.03 秒
+✓ 数据集分割完成
+训练集大小: 5109819
+测试集大小: 51615
+
+==================================================
+训练BiLSTM模型
+==================================================
+🔤 构建词汇表...
+Traceback (most recent call last):
+  File "/root/final/code/translation_trainer.py", line 640, in <module>
+    main()
+  File "/root/final/code/translation_trainer.py", line 627, in main
+    train_lstm_model(datasets)
+  File "/root/final/code/translation_trainer.py", line 536, in train_lstm_model
+    bilstm_trainer.build_vocab(datasets)
+  File "/root/final/code/translation_trainer.py", line 348, in build_vocab
+    src_tokens = example['english'].lower().split()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

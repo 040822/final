@@ -101,8 +101,8 @@ class T5Trainer:
     def setup_model(self):
         """设置模型和分词器"""
         print(f"🔧 初始化T5模型: {self.model_name}")
-        
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+        tokenizer_name = "google/mt5-base"
+        self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
         self.model = AutoModelForSeq2SeqLM.from_pretrained(self.model_name)
         self.metric = evaluate.load("sacrebleu")
         
@@ -593,18 +593,18 @@ def train_t5_model(datasets,model_name="t5-small",size=0.1):
     
     # 使用较小的数据集进行快速训练
     small_train = tokenized_datasets["train"].select(range(int(size*len(tokenized_datasets["train"]))))
-    small_test = tokenized_datasets["test"].select(range(int(size*len(tokenized_datasets["test"]))))
+    small_test = tokenized_datasets["test"].select(range(10000))
     small_datasets = {"train": small_train, "test": small_test}
     output_dir = f"t5/{model_name}_{size}"
-    t5_trainer.train(small_datasets, output_dir=output_dir, epochs=1, batch_size=256)
+    t5_trainer.train(small_datasets, output_dir=output_dir, epochs=2, batch_size=256)
     
 def scale_law_for_t5_model(datasets):
     train_t5_model(datasets, model_name="t5-small", size=0.001)
-    train_t5_model(datasets, model_name="t5-small", size=0.01)
-    train_t5_model(datasets, model_name="t5-small", size=0.1)
-    train_t5_model(datasets, model_name="t5-small", size=1)
-    train_t5_model(datasets, model_name="t5-base", size=0.1)
-    train_t5_model(datasets, model_name="t5-large", size=0.1)
+    #train_t5_model(datasets, model_name="t5-small", size=0.01)
+    #train_t5_model(datasets, model_name="t5-small", size=0.1)
+    #train_t5_model(datasets, model_name="t5-small", size=1)
+    #train_t5_model(datasets, model_name="t5-base", size=0.1)
+    #train_t5_model(datasets, model_name="t5-large", size=0.1)
     
 
 # 主训练函数
@@ -619,13 +619,13 @@ def main():
     data_processor = DataProcessor(
         train_file="data/translation2019zh_train.json",
         valid_file="data/translation2019zh_valid.json",
-        test_size=0.1
+        test_size=0.01
     )
     
     datasets = data_processor.load_data()
     #train_t5_model(datasets, model_name="t5-small", size=0.1)
-    train_lstm_model(datasets)
-    #scale_law_for_t5_model(datasets)
+    #train_lstm_model(datasets)
+    scale_law_for_t5_model(datasets)
 
     
     print("\n" + "="*50)
