@@ -101,12 +101,12 @@ class T5Trainer:
     def setup_model(self):
         """设置模型和分词器"""
         print(f"🔧 初始化T5模型: {self.model_name}")
-        #if self.model_name=="t5-small":
-        #    tokenizer_name = "google/m"+self.model_name
-        #else:
-        tokenizer_name = self.model_name
+        if self.model_name=="t5-small":
+            tokenizer_name = "google/m"+self.model_name
+        else:
+            tokenizer_name = self.model_name
         print(f"使用分词器: {tokenizer_name}")
-        self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
+        self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name, use_fast=False)
         self.model = AutoModelForSeq2SeqLM.from_pretrained(self.model_name,use_safetensors=True)
         self.metric = evaluate.load("sacrebleu")
         
@@ -162,7 +162,6 @@ class T5Trainer:
         if isinstance(preds, tuple):
             preds = preds[0]
         
-        preds = np.where(preds != -100, preds, self.tokenizer.pad_token_id)
         decoded_preds = self.tokenizer.batch_decode(preds, skip_special_tokens=True)
         labels = np.where(labels != -100, labels, self.tokenizer.pad_token_id)
         decoded_labels = self.tokenizer.batch_decode(labels, skip_special_tokens=True)
@@ -184,7 +183,7 @@ class T5Trainer:
         training_args = Seq2SeqTrainingArguments(
             output_dir=output_dir,
             eval_strategy="epoch",
-            learning_rate=1e-3,
+            learning_rate=1e-6,
             per_device_train_batch_size=batch_size,
             per_device_eval_batch_size=batch_size,
             weight_decay=0.01,
@@ -197,6 +196,7 @@ class T5Trainer:
             save_steps=1000,
             eval_steps=1000,
             report_to=None,  # 禁用wandb等
+            max_grad_norm=1.0,
         )
         
         data_collator = DataCollatorForSeq2Seq(self.tokenizer, model=self.model)
@@ -282,12 +282,12 @@ def train_t5_model(datasets,model_name="t5-small",size=0.1,use_cache=True):
     t5_trainer.train(small_datasets, output_dir=output_dir, epochs=1, batch_size=64)
     
 def scale_law_for_t5_model(datasets):
-    #train_t5_model(datasets, model_name="google/mt5-small", size=0.001,use_cache=True)
-    train_t5_model(datasets, model_name="t5-small", size=0.01, use_cache=False)
-    train_t5_model(datasets, model_name="t5-small", size=0.1)
-    train_t5_model(datasets, model_name="t5-small", size=1)
-    train_t5_model(datasets, model_name="t5-base", size=0.1)
-    train_t5_model(datasets, model_name="t5-large", size=0.1)
+    train_t5_model(datasets, model_name="google/mt5-small", size=0.1,use_cache=False)
+    #train_t5_model(datasets, model_name="t5-small", size=0.01)
+    #train_t5_model(datasets, model_name="t5-small", size=0.1)
+    #train_t5_model(datasets, model_name="t5-small", size=1)
+    #train_t5_model(datasets, model_name="t5-base", size=0.1)
+    #train_t5_model(datasets, model_name="t5-large", size=0.1)
     
 
 # 主训练函数
