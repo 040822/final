@@ -9,3 +9,10 @@ code/bilstm_tokenized_cache
 code/t5_tokenized_cache
 code/model_dir
 code/test_model
+*.arrow
+*.pt
+*.bin
+*.pth
+.gitignore
+.gitignore
+qwen/*
