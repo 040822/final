@@ -1,5 +1,5 @@
 import json
-
+# 使用10%的数据集
 input_file = r'/root/final/code/data/translation2019zh_train.json'
 output_file = r'/root/final/code/data/translation2019zh_train1.json'
 max_lines = 500000
