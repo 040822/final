@@ -157,7 +157,7 @@ class BleuTrackingCallback(TrainerCallback):
 class MBartTrainer:
     """mBART模型训练器"""
     
-    def __init__(self, model_name="facebook/mbart-large-50-many-to-many-mmt", max_length=512):
+    def __init__(self, model_name="facebook/mbart-large-50", max_length=512):
         self.model_name = model_name
         self.max_length = max_length
         self.tokenizer = None
@@ -171,9 +171,9 @@ class MBartTrainer:
         
         # 加载mBART专用的tokenizer和model
         self.tokenizer = MBart50TokenizerFast.from_pretrained(self.model_name)
-        self.model = MBartForConditionalGeneration.from_pretrained(self.model_name)
+        self.model = MBartForConditionalGeneration.from_pretrained(self.model_name,use_safetensors=True)
         
-        # 设置源语言和目标语言
+        # 设置源语言和目标语言 (cc25版本使用不同的语言代码)
         self.tokenizer.src_lang = "zh_CN" 
         self.tokenizer.tgt_lang = "en_XX"
         
@@ -314,7 +314,7 @@ class MBartTrainer:
             callbacks=[self.bleu_callback],  # 添加BLEU追踪回调
         )
         
-        # 训练模型
+        
         evaluate_result=trainer.evaluate()  # 初始评估
         print("🔄 初始评估结果:")
         print(evaluate_result)
@@ -364,8 +364,8 @@ class MBartTrainer:
             print(f"    参考: {label}")
             print()
             
-            
-        print("开始训练...")
+        
+        # 训练模型
         trainer.train()
         
         # 保存BLEU变化曲线
@@ -396,7 +396,7 @@ class MBartTrainer:
             
         # 生成预测
         with torch.no_grad():
-            # 设置目标语言token
+            # cc25版本使用不同的强制开始token
             generated_tokens = self.model.generate(
                 input_ids,
                 forced_bos_token_id=self.tokenizer.lang_code_to_id["en_XX"],
@@ -423,7 +423,7 @@ class MBartTrainer:
         print(f"✓ mBART模型训练完成，保存在: {output_dir}")
         return trainer
 
-def train_mbart_model(datasets, model_name="facebook/mbart-large-50-many-to-many-mmt", size=0.1, use_cache=True):
+def train_mbart_model(datasets, model_name="facebook/mbart-large-50", size=0.1, use_cache=True):
     """训练mBART模型"""
     print("\n" + "="*50)
     print("训练mBART模型")
@@ -452,16 +452,16 @@ def scale_law_for_mbart_model(datasets):
     print("="*50)
     
     # 不同数据集大小的实验
-    sizes = [0.01]
+    sizes = [0.01, 0.1]
     results = {}
     
     for size in sizes:
         print(f"\n🔄 训练数据集大小: {size*100:.1f}%")
         output_dir = train_mbart_model(
             datasets, 
-            model_name="facebook/mbart-large-50-many-to-many-mmt", 
+            model_name="facebook/mbart-large-50", 
             size=size, 
-            use_cache=True
+            use_cache=False
         )
         results[f"size_{size}"] = output_dir
     
